@@ -3,9 +3,14 @@ This is a project for the course Tietokannat ja web-ohjelmointi (Database and we
 
 ## Table of Contents
 
-1. [Features](#features)
-2. [Installation](#installation)
-3. [Usage](#usage)
+1. [Purpose of the Program](#purpose-of-the-program)
+2. [Features](#features)
+3. [Installation](#installation)
+4. [Usage](#usage)
+
+## Purpose of the Program
+
+The purpose of the program is to allow users to share their ideas for possible projects for the course Tietokannat ja web-ohjelmointi. Other users can then vote for the ideas they like. Users can also select projects to work on. Once a project is completed, users can mark it as completed. User can share the completed projects to other users f.ex. with github links and if they wish, can share what grade the project recieved.
 
 ## Features
 
