@@ -8,6 +8,9 @@ This is a project for the course Tietokannat ja web-ohjelmointi (Database and we
 3. [Installation](#installation)
 4. [Usage](#usage)
 5. [Current State](#current-state)
+6. [Current Issues](#current-issues)
+7. [Use of AI](#use-of-ai)
+
 
 ## Purpose of the Program
 
@@ -92,3 +95,10 @@ The program currently has the following features:
   * This will be edited later to be included in all pages
   * You can also logout by manually going to /logout page
   * Logging out deletes user_id and username from session
+ 
+ ## Current issues
+ * A lot of features are missing
+ * csrf-vulnerability
+
+## Use of AI
+[How AI has been used in the project](https://github.com/Gudkat/Tsoha-ideapankki/blob/main/docs/use_of_ai.md)
