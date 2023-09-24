@@ -1,0 +1,23 @@
+.container {
+    width: 100%;
+    max-width: 600px;  /* This will ensure the form doesn't look too stretched on wide screens */
+    margin: 0 auto;  /* This centers the form on the page */
+    padding: 20px;   /* Some padding to give space inside the container */
+}
+
+.form-group {
+    margin-bottom: 20px;  /* Spacing between form groups */
+}
+
+input[type="text"], textarea {
+    width: 100%;          /* Make input and textarea elements take the full width of their parent */
+    padding: 10px;       /* Some padding for visual comfort */
+    box-sizing: border-box;  /* Ensure that padding is included in the total width */
+}
+
+.button:hover {
+    background-color: #909090;
+}
+
+
+/* ChatGPT 4 generated this page at least partially */

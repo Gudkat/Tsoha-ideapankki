@@ -7,6 +7,7 @@ This is a project for the course Tietokannat ja web-ohjelmointi (Database and we
 2. [Features](#features)
 3. [Installation](#installation)
 4. [Usage](#usage)
+5. [Current State](#current-state)
 
 ## Purpose of the Program
 
@@ -25,6 +26,30 @@ The purpose of the program is to allow users to share their ideas for possible p
 1. Clone the repository
 ```bash
 git clone git@github.com:Gudkat/Tsoha-ideapankki.git
+```
+2. Create and activate virtual environment
+```bash
+python3 -m venv venv
+```
+```bash
+source venv/bin/activate
+```
+3. Install dependencies
+```bash
+pip install -r requirements.txt
+```
+4. Define the schema for the database
+```bash
+psql < schema.sql
+```
+5. Run posgresql database
+6. Run the python script to create .env file
+```bash
+setup_env.py
+``` 
+5. run the Flask app in the project directory with command
+```bash
+flask run
 ```
 
 ## Usage
@@ -54,3 +79,16 @@ git clone git@github.com:Gudkat/Tsoha-ideapankki.git
 1. **Viewing User Roles** - Admins can view all user roles and their permissions in the 'Roles' section.
 2. **Assigning Roles to Users** - Admins can assign specific roles to users, granting them permissions based on their role. Navigate to the 'User-Role Association' section, select a user, and assign a role.
 
+## Current state
+The program currently has the following features:
+* Account creation
+  * Account creation hashes passwords into database
+* Account login
+  * Saves user_id and username into session
+* Submission of ideas
+  * Ideas are saved into database
+* Logging out
+  * Logging out navigation is provided in the dummy page after submitting an idea
+  * This will be edited later to be included in all pages
+  * You can also logout by manually going to /logout page
+  * Logging out deletes user_id and username from session

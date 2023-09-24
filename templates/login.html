@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+    <style>
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding-top: 50px;
+        }
+        .alert {
+            color: red;
+            font-weight: bold;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label, input {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Login</h1>
+        <!-- Displaying the error message if any -->
+        {% if error %}
+        <div class="alert">
+            {{ error }}
+        </div>
+        {% endif %}
+    <form action="/login_validation" method="post">
+        <label for="username">Username:</label>
+        <input type="text" name="username" id="username" required>
+        <br>
+        <label for="password">Password:</label>
+        <input type="password" name="password">
+        <br>
+        <input type="submit" value="Login">
+        <!-- Retain the position of the sign up button here -->
+        <a href="/sign_up"><button type="button">Sign Up</button></a>
+    </form>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit Your Idea</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+
+<body>
+
+    <div class="container">
+        <h2>Submit Your Project Idea</h2>
+        
+        <form action="{{ url_for('submit') }}" method="post">
+            <div class="form-group">
+                <label for="projectName">Project Name:</label>
+                <input type="text" id="projectName" name="project_name" required placeholder="Enter the name of your project">
+            </div>
+            
+            <div class="form-group">
+                <label for="projectDescription">Description:</label>
+                <textarea id="projectDescription" name="project_description" rows="4" required placeholder="Describe your project"></textarea>
+            </div>
+            
+            <button type="submit" class="btn">Submit</button>
+        </form>
+    </div>
+
+</body>
+</html>
+
+
+<!-- generetaed by ChatGPT v. 4.0.0 -->
