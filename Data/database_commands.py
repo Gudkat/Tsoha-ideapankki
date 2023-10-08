@@ -72,7 +72,58 @@ def add_idea_to_db(user_id: int, project_name: str, description: str):
     except Exception as e:
         print("Error:", e)
 
+def get_ideas():
+    '''
+    Gets all the ideas from the database.
 
+    Returns:
+        ideas (list): List of all the ideas in the database.
+    '''
+
+    command = text("""
+        SELECT idea_id, user_id, project_name, description FROM ideas
+        """)
+    result = db.session.execute(command)
+    ideas = result.fetchall()
+    return ideas
+
+def get_idea_by_idea_id(idea_id):
+    '''
+    Gets the idea from the database by the idea ID.
+
+    Returns:
+        idea (tuple): Tuple of the idea.
+    '''
+
+    command = text("""
+        SELECT idea_id, user_id, project_name, description FROM ideas
+        WHERE idea_id=:idea_id
+        """)
+    result = db.session.execute(command, {"idea_id": idea_id})
+    idea = result.fetchone()
+    return idea
+
+def select_idea(user_id, idea_id):
+    print(user_id, idea_id)
+    '''
+    Links user with idea in the table "user_idea_link".
+
+    Parameters:
+        user_id (int): User ID of the individual.
+        idea_id (int): Idea ID of the idea.
+    '''
+
+    command = text("""
+        INSERT INTO user_idea_link (user_id, idea_id)
+        VALUES (:user_id, :idea_id)
+        """)
+    
+    try:
+        db.session.execute(command, {"user_id": user_id, "idea_id": idea_id})
+        db.session.commit()
+        print("Idea selected")
+    except Exception as e:
+        print("Error:", e)
 
 
 #ChatGPT v.4 gave the basic structure for the docstring format and was used to check and make small adjustments the what they became in the end

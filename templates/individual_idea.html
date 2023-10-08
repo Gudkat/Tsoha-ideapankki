@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Idea Details</title>
+</head>
+<body>
+
+    <h1>{{ idea.project_name }}</h1>
+    <h3>By User: {{ idea.user_id }}</h3>
+
+    <p><strong>Full Description:</strong></p>
+    <p>{{ idea.description }}</p>
+
+    <a href="{{ url_for('select_project', idea_id=idea.idea_id) }}">
+        <button type="button">Select Project</button>
+    </a>
+
+</body>
+</html>

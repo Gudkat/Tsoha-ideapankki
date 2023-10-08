@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>All Ideas</title>
+</head>
+<body>
+
+    <h1>Available Ideas</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Idea ID</th>
+                <th>User ID</th>
+                <th>Project Name</th>
+                <th>Description (First 10 words)</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for idea in ideas %}
+                <tr>
+                    <td>{{ idea.idea_id }}</td>
+                    <td>{{ idea.user_id }}</td>
+                    <td>{{ idea.project_name }}</td>
+                    <td>{{ ' '.join(idea.description.split()[:10]) }}{% if idea.description.split()|length > 10 %}...{% endif %}</td>
+                    <td>
+                        <a href="{{ url_for('idea_page', idea_id=idea.idea_id) }}">
+                            <button>View Idea</button>
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
