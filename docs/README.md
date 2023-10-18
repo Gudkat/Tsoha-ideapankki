@@ -85,19 +85,25 @@ flask run
 ## Current state
 The program currently has the following features:
 * Account creation
-  * Account creation hashes passwords into database
+  * Account creation hashes passwords into the database
 * Account login
-  * Saves user_id and username into session
+  * Saves user_id and username into the session
 * Submission of ideas
   * Ideas are saved into database
+* Viewing ideas
+  * Ideas can be viewed as a list and individually with full descriptions.
+* Selecting ideas
+  * User can select idea to be linked to their account
 * Logging out
-  * Logging out navigation is provided in the dummy page after submitting an idea
+  * Logging out navigation is provided on the dummy page after submitting an idea
   * This will be edited later to be included in all pages
-  * You can also logout by manually going to /logout page
+  * You can also log out by manually going to /logout page
   * Logging out deletes user_id and username from session
  
  ## Current issues
- * A lot of features are missing
+ * Admin features (and table for it in database) are missing
+ * Navigation in the app is difficult, due to no navbar.
+ * Upvoting/downvoting features for projects i smissing
  * csrf-vulnerability
 
 ## Use of AI
