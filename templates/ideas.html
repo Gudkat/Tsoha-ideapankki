@@ -4,9 +4,10 @@
     <meta charset="UTF-8">
     <title>All Ideas</title>
 </head>
-<body>
-
-    <h1>Available Ideas</h1>
+{% extends "layout.html" %}
+{% block title %} All ideas {% endblock %}
+{% block content %}
+    <h1>All Ideas</h1>
     <table border="1">
         <thead>
             <tr>
@@ -33,5 +34,5 @@
             {% endfor %}
         </tbody>
     </table>
-</body>
+{% endblock %}
 </html>

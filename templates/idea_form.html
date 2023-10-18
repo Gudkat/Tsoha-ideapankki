@@ -2,14 +2,12 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Submit Your Idea</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 
-<body>
-
+{% extends "layout.html" %}
+{% block title %} New idea {% endblock %}
+{% block content %}
     <div class="container">
         <h2>Submit Your Project Idea</h2>
         
@@ -28,8 +26,8 @@
         </form>
     </div>
 
-</body>
-</html>
+{% endblock %}
+    </html>
 
 
 <!-- generetaed by ChatGPT v. 4.0.0 -->

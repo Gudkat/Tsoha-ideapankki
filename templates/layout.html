@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333;
+}
+
+li {
+  float: left;
+}
+
+li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+li a:hover {
+  background-color: #111;
+}
+
+/* Center content */
+.container {
+  max-width: 800px; /* Adjust as needed */
+  margin: 0 auto;
+}
+</style>
+
+<title>Tsoha ideapankki - {% block title %}{% endblock %}</title>
+
+</head>
+<body>
+
+<ul>
+  <li><a class="active" href="#projects">My Projects</a></li>
+  <li><a href="/ideas">Browse Ideas</a></li>
+  <li><a href="/idea_form">New Idea</a></li>
+  
+  {% if session.user_id %}
+    <li style="float: right;"><a href="/logout">Logout</a></li>
+  {% else %}
+    <li style="float: right;"><a href="/login">Login</a></li>
+  {% endif %}
+</ul>
+<div class="container">
+  {% block content %}{% endblock %}
+</div>
+
+</body>
+</html>
+
+<!-- Basic structure found from w3schools.com
+Modified with ChatGPT-4 -->
