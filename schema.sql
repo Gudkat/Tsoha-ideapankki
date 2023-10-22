@@ -17,15 +17,21 @@ CREATE TABLE ideas (
 CREATE TABLE user_idea_link (
     user_id INTEGER REFERENCES users(user_id),
     idea_id INTEGER REFERENCES ideas(idea_id),
-    PRIMARY KEY(user_id, idea_id)
+    PRIMARY KEY(user_id, idea_id),
+    bookmarked BOOLEAN DEFAULT FALSE,
+    selected BOOLEAN DEFAULT FALSE
 );
 
 CREATE TABLE completed_projects (
-    project_id SERIAL PRIMARY KEY,
+    idea_id INTEGER REFERENCES ideas(idea_id), 
     user_id INTEGER REFERENCES users(user_id),
-    project_url VARCHAR(2048) NOT NULL,
+    project_url VARCHAR(2048),
     grade VARCHAR(10),
-    date_completed TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    date_completed TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE (idea_id, user_id),
+    CONSTRAINT check_grade_if_url
+        CHECK ((project_url IS NOT NULL AND grade IS NOT NULL) OR (project_url IS NULL AND grade IS NULL))
 );
+-- completed_projects not tested yet
 
 -- ChatGPT v4 translated my python code to create the tables to schema.sql file 

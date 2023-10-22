@@ -1,0 +1,34 @@
+.custom-form .container {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.custom-form .form-group {
+    margin-bottom: 20px;
+}
+
+.custom-form input[type="text"], .custom-form textarea {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.custom-form .button:hover {
+    background-color: #909090;
+}
+
+.tables table,
+.tables td,
+.tables th {
+    border: 1px solid;
+    border-spacing: 0; 
+}
+
+.tables table {
+    width: 100%;
+}
+
+
+/* ChatGPT 4 generated most of the stylesheet */

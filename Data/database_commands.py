@@ -103,25 +103,178 @@ def get_idea_by_idea_id(idea_id):
     idea = result.fetchone()
     return idea
 
-def select_idea(user_id, idea_id):
-    print(user_id, idea_id)
+def select_idea(user_id, idea_id, selected=False, bookmarked=False):
     '''
     Links user with idea in the table "user_idea_link".
 
     Parameters:
         user_id (int): User ID of the individual.
         idea_id (int): Idea ID of the idea.
+        selected (bool): True if the user has selected the idea, False if not.
+        bookmarked (bool): True if the user has bookmarked the idea, False if not.
     '''
 
+    # If the row exists in database, update the bookmarked and selected values. 
+    # If not, create a new row.
     command = text("""
-        INSERT INTO user_idea_link (user_id, idea_id)
-        VALUES (:user_id, :idea_id)
+        INSERT INTO user_idea_link (user_id, idea_id, selected, bookmarked)
+        VALUES (:user_id, :idea_id, :selected, :bookmarked)
+        ON CONFLICT (user_id, idea_id)
+        DO UPDATE SET selected=:selected, bookmarked=:bookmarked
         """)
     
     try:
-        db.session.execute(command, {"user_id": user_id, "idea_id": idea_id})
+        db.session.execute(command, {"user_id": user_id, "idea_id": idea_id, "selected": selected, "bookmarked": bookmarked})
         db.session.commit()
-        print("Idea selected")
+    except Exception as e:
+        print("Error:", e)
+
+
+# Probably not needed anymore
+def get_selected_ideas(user_id):
+    '''
+    Gets the ideas that the user has selected.
+
+    Parameters:
+        user_id (int): User ID of the individual.
+
+    Returns:
+        ideas (list): List of the ideas that the user has selected.
+    '''
+
+    command = text("""
+        SELECT idea_id, project_name, description FROM ideas
+        WHERE idea_id IN (SELECT idea_id FROM user_idea_link WHERE user_id=:user_id AND selected=:selected)
+        """)
+
+    result = db.session.execute(command, {"user_id": user_id, "selected": True})
+    ideas = result.fetchall()
+    return ideas
+
+# Probably not needed anymore
+def get_bookmarked_ideas(user_id):
+    '''
+    Gets the ideas that the user has bookmarked.
+
+    Parameters:
+        user_id (int): User ID of the individual.
+
+    Returns:
+        ideas (list): List of the ideas that the user has bookmarked.
+    '''
+
+    command = text("""
+        SELECT idea_id, project_name, description FROM ideas
+        WHERE idea_id IN (SELECT idea_id FROM user_idea_link WHERE user_id=:user_id AND bookmarked=:bookmarked)
+        """)
+
+    result = db.session.execute(command, {"user_id": user_id, "bookmarked": True})
+    ideas = result.fetchall()
+    return ideas
+
+def is_idea_completed(idea_id, user_id):
+    '''
+    Checks if the idea is marked completed for the current user.
+
+    Parameters:
+        idea_id (int): Idea ID of the idea.
+        user_id (int): User ID of the individual.
+    
+    Returns:
+        idea_completed (bool): True if the idea is marked completed for the current user, False if not.    
+    '''
+
+    command = text("""
+        SELECT EXISTS (
+                   SELECT * 
+                   FROM completed_projects
+                   WHERE idea_id=:idea_id AND user_id=:user_id
+            )
+        """)
+    result = db.session.execute(command, {"idea_id": idea_id, "user_id": user_id})
+    idea_completed = result.fetchone()[0]
+    return idea_completed
+
+def get_project_info(idea_id, user_id):
+    '''
+    Gets information for the project.
+
+    Parameters:
+        idea_id (int): Idea ID of the idea.
+        user_id (int): User ID of the individual.
+
+    Returns:
+        project_info (tuple): Tuple of the project information.
+    '''
+
+    command = text("""
+        SELECT 
+            ideas.idea_id,
+            ideas.project_name,
+            ideas.description,
+            user_idea_link.selected,
+            user_idea_link.bookmarked,
+            completed_projects.project_url,
+            completed_projects.grade
+        FROM ideas
+        LEFT JOIN user_idea_link ON ideas.idea_id = user_idea_link.idea_id
+        LEFT JOIN completed_projects ON ideas.idea_id = completed_projects.idea_id AND user_idea_link.user_id = completed_projects.user_id
+        WHERE ideas.idea_id = :idea_id AND user_idea_link.user_id = :user_id;
+        """)
+    result = db.session.execute(command, {"idea_id": idea_id, "user_id": user_id})
+    project_info = result.fetchone()
+    return project_info
+
+def get_all_project_info(user_id):
+    '''
+    Gets information for all the projects linked to a specific user.
+
+    Parameters:
+        user_id (int): User ID of the individual.
+
+    Returns:
+        project_info_list (list): List of tuples, each containing project information.
+    '''
+
+    command = text("""
+        SELECT 
+            ideas.idea_id,
+            ideas.project_name,
+            ideas.description,
+            user_idea_link.selected,
+            user_idea_link.bookmarked,
+            completed_projects.project_url,
+            completed_projects.grade
+        FROM user_idea_link
+        LEFT JOIN ideas ON user_idea_link.idea_id = ideas.idea_id
+        LEFT JOIN completed_projects ON user_idea_link.idea_id = completed_projects.idea_id AND user_idea_link.user_id = completed_projects.user_id
+        WHERE user_idea_link.user_id = :user_id;
+        """)
+
+    result = db.session.execute(command, {"user_id": user_id})
+    project_info_list = result.fetchall()
+    return project_info_list
+
+def mark_completed(idea_id, user_id, project_url=None, grade=None):
+    '''
+    Marks the project as completed for the user.
+
+    Parameters:
+        idea_id (int): Idea ID of the idea.
+        user_id (int): User ID of the individual.
+        project_url (str): URL of the project.
+        grade (int): Grade of the project.
+    '''
+
+    command = text("""
+        INSERT INTO completed_projects (idea_id, user_id, project_url, grade)
+        VALUES (:idea_id, :user_id, :project_url, :grade)
+        ON CONFLICT (idea_id, user_id)
+        DO UPDATE SET project_url=:project_url, grade=:grade
+        """)
+    try:
+        db.session.execute(command, {"idea_id": idea_id, "user_id": user_id, "project_url": project_url, "grade": grade})
+        db.session.commit()
     except Exception as e:
         print("Error:", e)
 

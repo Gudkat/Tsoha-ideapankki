@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+{% block title %}Edit Project{% endblock %}
+{% block content %}
+
+    <h1>Edit Project</h1>
+    <h2>Idea Information</h2>
+    <p>Idea Name: {{ idea_info.name }}</p>
+    <p>Description: {{ idea_info.description }}</p>
+
+    {% if error %}
+        <p style="color:red;">{{ error }}</p>
+    {% endif %}
+    
+    <h2>Project Information</h2>
+    <form action="/update_project" method="post", class="custom-form">
+        <label for="project_url">Project URL:</label><br>
+        <input type="text" id="project_url" name="project_url"><br><br>
+        
+        <label for="grade">Grade:</label><br>
+        <input type="text" id="grade" name="grade"><br><br>
+                <input type="hidden" name="idea_id" value="{{ idea_info.idea_id }}">
+        
+        <input type="submit" value="Submit">
+    </form>
+{% endblock %}

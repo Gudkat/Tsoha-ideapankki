@@ -2,14 +2,13 @@ from app import app
 from flask import redirect, render_template, request, session
 from sqlalchemy.sql import text
 import re
-from Data.database_commands import create_user, login, add_idea_to_db, get_ideas, get_idea_by_idea_id, select_idea
+from Data.database_commands import *
 
-
-# index, login and logout are partially ripped from course webpage. I'll work on it myself later on I guess.
 @app.route("/")
 def index():
     if 'user_id' in session:
-        return render_template("index.html")
+        project_info_list = get_all_project_info(session["user_id"])
+        return render_template("index.html", project_info_list=project_info_list)
     else:
         return redirect("/login")
 
@@ -86,16 +85,41 @@ def idea_page(idea_id):
     idea = get_idea_by_idea_id(idea_id)
     return render_template('individual_idea.html', idea=idea)
 
-# @app.route('/ideas/<idea_id>', methods=['POST'])
-# def select_idea(idea_id):
-#     # Your logic here to mark the idea as selected for your personal project
-#     return redirect(('ideas.html'))
-
 @app.route('/select_project/<int:idea_id>', methods=['GET'])
 def select_project(idea_id):
     user_id = int(session["user_id"])
-    select_idea(user_id, idea_id)
+    select_idea(user_id, idea_id, selected=True)
     return redirect('/ideas')
+
+@app.route('/bookmark_project/<int:idea_id>', methods=['GET'])
+def bookmark_project(idea_id):
+    user_id = int(session["user_id"])
+    select_idea(user_id, idea_id, bookmarked=True)
+    return redirect('/ideas')
+
+@app.route('/edit_project/<int:idea_id>', methods=['GET'])
+def edit_project(idea_id):
+    user_id = int(session["user_id"])
+    idea_info = get_project_info(idea_id, user_id)
+    print(idea_info)
+
+    return render_template('edit_project.html', idea_info=idea_info)
+
+@app.route("/update_project", methods=["POST"])
+def update_project():
+    user_id = int(session["user_id"])
+    idea_id = int(request.form.get("idea_id"))
+    project_url = request.form.get("project_url")
+    grade = request.form.get("grade")
+    idea_info = get_project_info(idea_id, user_id)
+
+    if not project_url and grade:
+        return render_template("edit_project.html", error="You cannot insert a grade without a project URL.", idea_info=idea_info)
+
+    mark_completed(idea_id, user_id, project_url, grade)
+    return redirect('/')
+
+
 
 def is_valid_username(username):
     pattern = r"^[a-zA-Z0-9_]{3,20}$"

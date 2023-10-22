@@ -11,5 +11,8 @@
     <a href="{{ url_for('select_project', idea_id=idea.idea_id) }}">
         <button type="button">Select Project</button>
     </a>
+    <a href="{{ url_for('bookmark_project', idea_id=idea.idea_id) }}">
+        <button type="button">Bookmark Project</button>
+    </a>
 
 {% endblock %}
