@@ -1,13 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-</head>
-
 {% extends "layout.html" %}
 {% block title %} New idea {% endblock %}
 {% block content %}
+
     <div class="custom-form">
         <h2>Submit Your Project Idea</h2>
         
@@ -23,11 +17,9 @@
             </div>
             
             <button type="submit" class="btn">Submit</button>
+            <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
         </form>
     </div>
 
 {% endblock %}
-    </html>
-
-
 <!-- generetaed by ChatGPT v. 4.0.0 -->

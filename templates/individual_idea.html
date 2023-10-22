@@ -8,11 +8,14 @@
     <p><strong>Full Description:</strong></p>
     <p>{{ idea.description }}</p>
 
-    <a href="{{ url_for('select_project', idea_id=idea.idea_id) }}">
-        <button type="button">Select Project</button>
-    </a>
-    <a href="{{ url_for('bookmark_project', idea_id=idea.idea_id) }}">
-        <button type="button">Bookmark Project</button>
-    </a>
+<form action="{{ url_for('bookmark_project', idea_id=idea.idea_id) }}" method="post" class="inline-form">
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+    <button type="submit">Bookmark Project</button>
+</form>
+
+<form action="{{ url_for('select_project', idea_id=idea.idea_id) }}" method="post" class="inline-form">
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+    <button type="submit">Select Project</button>
+</form>
 
 {% endblock %}

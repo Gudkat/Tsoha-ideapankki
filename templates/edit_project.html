@@ -13,13 +13,13 @@
     
     <h2>Project Information</h2>
     <form action="/update_project" method="post", class="custom-form">
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
         <label for="project_url">Project URL:</label><br>
         <input type="text" id="project_url" name="project_url"><br><br>
         
         <label for="grade">Grade:</label><br>
         <input type="text" id="grade" name="grade"><br><br>
                 <input type="hidden" name="idea_id" value="{{ idea_info.idea_id }}">
-        
         <input type="submit" value="Submit">
     </form>
 {% endblock %}

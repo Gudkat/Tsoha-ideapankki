@@ -1,8 +1,9 @@
 from app import app
-from flask import redirect, render_template, request, session
+from flask import redirect, render_template, request, session, abort
 from sqlalchemy.sql import text
 import re
 from Data.database_commands import *
+from secrets import token_hex as generate_csrf_token
 
 @app.route("/")
 def index():
@@ -31,7 +32,6 @@ def sign_up_validation():
 def login_form():
     return render_template("login.html")
 
-
 @app.route("/login_validation",methods=["POST"])
 def login_validation():
     username = request.form["username"]
@@ -41,6 +41,8 @@ def login_validation():
     if user_id:
         session["username"] = username
         session["user_id"] = user_id
+        session["csrf_token"] = generate_csrf_token()
+
         return redirect("/")    
     else: 
         return render_template("login.html", error="Invalid username or password.")
@@ -54,23 +56,15 @@ def logout():
 def idea_form():
     return render_template('idea_form.html')
 
-@app.route('/submit_idea', methods=['POST'])
-def submit_idea():
-    user_id = int(session["user_id"])
-    project_name = request.form.get('project_name')
-    project_description = request.form.get('project_description')
-    add_idea_to_db(user_id, project_name, project_description)
-
-    return render_template('submit.html', project_name=project_name, project_description=project_description)
-
 @app.route('/submit', methods=['POST'])
 def submit():
     user_id = int(session["user_id"])
     project_name = request.form.get('project_name')
     project_description = request.form.get('project_description')
-
     project_name = request.form.get('project_name')
     project_description = request.form.get('project_description')
+
+    check_csrf_token()
     add_idea_to_db(user_id, project_name, project_description)
 
     return render_template('submit.html', project_name=project_name, project_description=project_description)
@@ -87,6 +81,7 @@ def idea_page(idea_id):
 
 @app.route('/select_project/<int:idea_id>', methods=['GET'])
 def select_project(idea_id):
+    check_csrf_token()
     user_id = int(session["user_id"])
     select_idea(user_id, idea_id, selected=True)
     return redirect('/ideas')
@@ -94,6 +89,7 @@ def select_project(idea_id):
 @app.route('/bookmark_project/<int:idea_id>', methods=['GET'])
 def bookmark_project(idea_id):
     user_id = int(session["user_id"])
+    check_csrf_token()
     select_idea(user_id, idea_id, bookmarked=True)
     return redirect('/ideas')
 
@@ -107,6 +103,8 @@ def edit_project(idea_id):
 
 @app.route("/update_project", methods=["POST"])
 def update_project():
+    check_csrf_token()
+    
     user_id = int(session["user_id"])
     idea_id = int(request.form.get("idea_id"))
     project_url = request.form.get("project_url")
@@ -119,7 +117,10 @@ def update_project():
     mark_completed(idea_id, user_id, project_url, grade)
     return redirect('/')
 
-
+def check_csrf_token():
+    if session["csrf_token"] != request.form["csrf_token"]:
+        print("Aborting!")
+        abort(403)
 
 def is_valid_username(username):
     pattern = r"^[a-zA-Z0-9_]{3,20}$"
