@@ -30,5 +30,8 @@
     width: 100%;
 }
 
+form.inline-form {
+    display: inline-block;
+}
 
 /* ChatGPT 4 generated most of the stylesheet */
