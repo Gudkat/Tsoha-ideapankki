@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+{% block title %}Completed Projects{% endblock %}
+{% block content %}
+
+<h1>Completed Projects</h1>
+
+<table class="tables">
+    <tr>
+        <th>Project Name</th>
+        <th>Description</th>
+        <th>Source</th>
+        <th>Grade</th>
+        <th>View Idea</th>
+    </tr>
+    {% for project in completed_projects_list %}
+        <tr>
+            <td>{{ project.project_name }}</td>
+            <td>{{ ' '.join(project.description.split()[:10]) }}</td>
+            <td>{{ project.project_url or 'N/A' }}</td>
+            <td>{{ project.grade or 'N/A' }}</td>
+            <td>
+                <a href="{{ url_for('idea_page', idea_id=project.idea_id) }}">
+                    <button type="button">View Idea</button>
+                </a>
+            </td>
+        </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

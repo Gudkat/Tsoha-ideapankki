@@ -240,6 +240,27 @@ def mark_completed(idea_id, user_id, project_url=None, grade=None):
     except Exception as e:
         print("Error:", e)
 
+def get_completed_projects():
+    '''
+    Gets all the completed projects.
+
+    Returns:
+        completed_projects_list (list): List of tuples, each containing information about the completed project.
+    '''
+
+    command = text("""
+        SELECT 
+            ideas.idea_id,
+            ideas.project_name,
+            ideas.description,
+            completed_projects.project_url,
+            completed_projects.grade
+        FROM completed_projects
+        LEFT JOIN ideas ON completed_projects.idea_id = ideas.idea_id
+        """)
+    result = db.session.execute(command)
+    completed_projects_list = result.fetchall()
+    return completed_projects_list
 
 #ChatGPT v.4 gave the basic structure for the docstring format and was used to check and make small adjustments the what they became in the end
 #ChatGPT v.4 helped partially with the formatting of the code

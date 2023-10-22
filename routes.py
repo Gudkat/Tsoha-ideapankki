@@ -121,6 +121,12 @@ def update_project():
     mark_completed(idea_id, user_id, project_url, grade)
     return redirect('/')
 
+@app.route('/completed_projects')
+def completed_projects():
+    completed_projects_list = get_completed_projects()
+    return render_template('completed_projects.html', completed_projects_list=completed_projects_list)
+
+
 def check_csrf_token():
     if session["csrf_token"] != request.form["csrf_token"]:
         print("Aborting!")
