@@ -10,6 +10,7 @@ This is a project for the course Tietokannat ja web-ohjelmointi (Database and we
 5. [Current State](#current-state)
 6. [Current Issues](#current-issues)
 7. [Use of AI](#use-of-ai)
+8. [Future Plans](#future-plans)
 
 
 ## Purpose of the Program
@@ -18,12 +19,9 @@ The purpose of the program is to allow users to share their ideas for possible p
 
 ## Features
 
-- **User Management**: Create, edit, and delete user profiles.
 - **Idea Management**: Users can share their ideas for possible projects.
 - **Project Selection**: Allows users to select projects based on various ideas.
 - **Track Completed Projects**: Monitor projects that have been successfully completed.
-- **Role-based Access**: Define roles for admin and normal user and assign them to users for different access levels.
-- **Voting projects** Users can vote for projects they like or dislike. The projects will be shown in the order of most liked to least liked.
 
 ## Installation
 1. Clone the repository
@@ -61,50 +59,28 @@ flask run
 
 1. **Register** - New users can create an account. New users are assigned the 'User' role by default. If no other users exist, the first user will be assigned the 'Admin' role.
 2. **Login** - Users can log in with their credentials to access their accounts.
-3. **User access** - 'User' can submit ideas, choose projects, mark their project completed and view projects that are completed. 'User' can also vote for projects and ideas.
-4. **Admin access** - 'Admins' have all the same rights as 'Users'. In addition, 'Admins' can view all 'users' and their details. 'Admins' also have Role Management rights.
+3. **User access** - 'User' can submit ideas, choose projects, mark their project completed and view projects that are completed. 
 
 ### Ideas
 
-1. **Submit a New Idea** - Navigate to the 'Ideas' section and click on 'Submit New Idea'. Provide a title and description.
-2. **Edit/Delete Idea** - 'Users' can edit or delete their ideas if nobody has chosen said project yet. Editing project will reset the vote count.
-3. **Voting Ideas** - 'Users' can vote for ideas they like or dislike. The ideas will be shown in the order of most liked to least liked. Votes can't go below 0.
+1. **Submit a New Idea** - User can create new idea for a project by navigating to 'New Idea'. New idea requires for user to provide a title and a description.
 
 ### Projects
 
-1. **Choose a Project** - Browse the ideas available and select one to work on by clicking 'Choose This Idea'. The chosen idea will now be your 'Active project'.
-2. **Marking a Project as Completed** - Once you've successfully completed a project, navigate to your projects list and select 'Mark as Completed' for the respective project.
-3. **View Completed Projects** - Navigate to the 'Your Completed Projects' section to view all the projects you've completed. Navigate to the 'All Completed Projects' section to view all the projects completed by all users.
-4. **Voting Projects** - Users can vote for projects they like or dislike. The projects will be shown in the order of most liked to least liked.
-
-### Role Management
-
-1. **Viewing User Roles** - Admins can view all user roles and their permissions in the 'Roles' section.
-2. **Assigning Roles to Users** - Admins can assign specific roles to users, granting them permissions based on their role. Navigate to the 'User-Role Association' section, select a user, and assign a role.
-
-## Current state
-The program currently has the following features:
-* Account creation
-  * Account creation hashes passwords into the database
-* Account login
-  * Saves user_id and username into the session
-* Submission of ideas
-  * Ideas are saved into database
-* Viewing ideas
-  * Ideas can be viewed as a list and individually with full descriptions.
-* Selecting ideas
-  * User can select idea to be linked to their account
-* Logging out
-  * Logging out navigation is provided on the dummy page after submitting an idea
-  * This will be edited later to be included in all pages
-  * You can also log out by manually going to /logout page
-  * Logging out deletes user_id and username from session
- 
- ## Current issues
- * Admin features (and table for it in database) are missing
- * Navigation in the app is difficult, due to no navbar.
- * Upvoting/downvoting features for projects i smissing
- * csrf-vulnerability
+1. **Choose a Project** - Browse the ideas available and select one or more ideas to work on by clicking 'Select Project' under 'Browse Ideas' section. The chosen idea will be viewed as 'Active project' under 'My Prjojects' section.
+2. **Marking a Project as Completed** - Once user has successfully completed a project, user can go to 'My Projects' and click 'edit idea'. There user can mark the project as completed and provide a link to the source of the project and mark which grade they recieved for hte project. Source and grade are optional and can be edited later.
+3. **View Completed Projects** - View completed projects in 'My Projects' section. 
 
 ## Use of AI
 [How AI has been used in the project](https://github.com/Gudkat/Tsoha-ideapankki/blob/main/docs/use_of_ai.md)
+
+## Future plans
+* Add admin features
+  - 'Admins' have all the same rights as 'Users'. In addition, 'Admins' can view all 'users' and their details. 'Admins' also have Role Management rights.
+  - 'Admins' can delete users
+  - 'Admins' can delete ideas
+  - 'Admins' can delete projects
+  - 'Admins' can give other users admin rights
+
+* Add upvoting/downvoting features for projects
+ - Users can vote for projects they like or dislike. The projects will be shown in the order of most liked to least liked.
