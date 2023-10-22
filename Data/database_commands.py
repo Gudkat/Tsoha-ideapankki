@@ -68,7 +68,6 @@ def add_idea_to_db(user_id: int, project_name: str, description: str):
     try:
         db.session.execute(command, {"user_id": user_id, "project_name": project_name, "description": description})
         db.session.commit()
-        print("Idea added to the database")
     except Exception as e:
         print("Error:", e)
 
@@ -92,13 +91,15 @@ def get_idea_by_idea_id(idea_id):
     Gets the idea from the database by the idea ID.
 
     Returns:
-        idea (tuple): Tuple of the idea.
+        idea (tuple): Tuple of the idea and username.
     '''
 
     command = text("""
-        SELECT idea_id, user_id, project_name, description FROM ideas
-        WHERE idea_id=:idea_id
-        """)
+        SELECT ideas.idea_id, ideas.user_id, users.username, ideas.project_name, ideas.description
+        FROM ideas
+        JOIN users ON ideas.user_id = users.user_id
+        WHERE ideas.idea_id=:idea_id
+    """)
     result = db.session.execute(command, {"idea_id": idea_id})
     idea = result.fetchone()
     return idea

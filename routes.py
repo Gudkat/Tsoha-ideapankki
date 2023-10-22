@@ -1,6 +1,5 @@
 from app import app
 from flask import redirect, render_template, request, session, abort
-from sqlalchemy.sql import text
 import re
 from Data.database_commands import *
 from secrets import token_hex as generate_csrf_token
@@ -37,7 +36,6 @@ def login_validation():
     username = request.form["username"]
     password = request.form["password"]
     user_id = login(username, password)
-    print(user_id)
     if user_id:
         session["username"] = username
         session["user_id"] = user_id
@@ -79,17 +77,17 @@ def idea_page(idea_id):
     idea = get_idea_by_idea_id(idea_id)
     return render_template('individual_idea.html', idea=idea)
 
-@app.route('/select_project/<int:idea_id>', methods=['GET'])
+@app.route('/select_project/<int:idea_id>', methods=['POST'])
 def select_project(idea_id):
     check_csrf_token()
     user_id = int(session["user_id"])
     select_idea(user_id, idea_id, selected=True)
     return redirect('/ideas')
 
-@app.route('/bookmark_project/<int:idea_id>', methods=['GET'])
+@app.route('/bookmark_project/<int:idea_id>', methods=['POST'])
 def bookmark_project(idea_id):
-    user_id = int(session["user_id"])
     check_csrf_token()
+    user_id = int(session["user_id"])
     select_idea(user_id, idea_id, bookmarked=True)
     return redirect('/ideas')
 
@@ -97,8 +95,6 @@ def bookmark_project(idea_id):
 def edit_project(idea_id):
     user_id = int(session["user_id"])
     idea_info = get_project_info(idea_id, user_id)
-    print(idea_info)
-
     return render_template('edit_project.html', idea_info=idea_info)
 
 @app.route("/update_project", methods=["POST"])
