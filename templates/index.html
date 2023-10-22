@@ -4,43 +4,89 @@
 
 <h1>Projects overview</h1>
 
-<h3>My Projects:</h3>
+<h3>Active Projects:</h3>
 <table class="tables">
     <tr>
         <th>Project name</th>
         <th>Project description</th>
-        <th>Project URL</th>
-        <th>Grade</th>
-        <th></th>
+        <th>Mark completed</th>
+        <th>Remove project</th>
     </tr>
     {% for project in project_info_list %}
-        {% if project.selected %}
+        {% if project.selected and not project.completed %}
             <tr>
                 <td>{{ project.project_name }}</td>
-                <td>{{ project.description }}</td>
-                <td>{{ project.project_url or 'N/A' }}</td>
-                <td>{{ project.grade or 'N/A' }}</td>
+                <td>{{ ' '.join(project.description.split()[:10]) }}</td>
                 <td>
                     <a href="{{ url_for('edit_project', idea_id=project.idea_id) }}">
-                        <button type="button">Edit Project</button>
+                        <button type="button">Mark completed</button>
                     </a>
+                </td>
+                <td>
+                  <form action="{{ url_for('discard_project') }}" method="post">
+                    <input type="hidden" name="idea_id" value="{{ project.idea_id }}">
+                    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+                    <button type="submit">Remove project</button>
+                </form>
                 </td>
             </tr>
         {% endif %}
     {% endfor %}
 </table>
 
+
+<h3>Completed Projects:</h3>
+<table class="tables">
+    <tr>
+        <th>Project name</th>
+        <th>Project description</th>
+        <th>Source</th>
+        <th>Grade</th>
+        <th>View Idea</th>
+        <th></th>
+    </tr>
+    {% for project in project_info_list %}
+        {% if project.completed %}
+            <tr>
+                <td>{{ project.project_name }}</td>
+                <td>{{ ' '.join(project.description.split()[:10]) }}</td>
+                <td>{{ project.project_url or 'N/A' }}</td>
+                <td>{{ project.grade or 'N/A' }}</td>
+                <td>
+                  <a href="{{ url_for('idea_page', idea_id=project.idea_id) }}">
+                      <button type="button">View Idea</button>
+                  </a>
+                </td>
+                <td>
+                  <a href="{{ url_for('edit_project', idea_id=project.idea_id) }}">
+                      <button type="button">Edit Project</button>
+                  </a>
+                </td>
+            </tr>
+        {% endif %}
+    {% endfor %}
+</table>
+
+
 <h3>Bookmarked Projects:</h3>
 <table class="tables">
     <tr>
         <th>Project name</th>
         <th>Project description</th>
+        <th>Remove project</th>
     </tr>
     {% for project in project_info_list %}
-        {% if project.bookmarked %}
+        {% if project.bookmarked and not project.completed %}
             <tr>
                 <td>{{ project.project_name }}</td>
                 <td>{{ project.description }}</td>
+                <td>
+                  <form action="{{ url_for('discard_project') }}" method="post">
+                    <input type="hidden" name="idea_id" value="{{ project.idea_id }}">
+                    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+                    <button type="submit">Remove project</button>
+                </form>
+                </td>
             </tr>
         {% endif %}
     {% endfor %}

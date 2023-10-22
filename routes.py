@@ -91,6 +91,14 @@ def bookmark_project(idea_id):
     select_idea(user_id, idea_id, bookmarked=True)
     return redirect('/ideas')
 
+@app.route('/discard_project', methods=['POST'])
+def discard_project():
+    idea_id = int(request.form.get('idea_id'))
+    check_csrf_token()
+    user_id = int(session["user_id"])
+    select_idea(user_id, idea_id, selected=False, bookmarked=False)
+    return redirect('/')
+
 @app.route('/edit_project/<int:idea_id>', methods=['GET'])
 def edit_project(idea_id):
     user_id = int(session["user_id"])

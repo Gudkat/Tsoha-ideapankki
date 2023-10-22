@@ -245,12 +245,31 @@ def get_all_project_info(user_id):
             user_idea_link.selected,
             user_idea_link.bookmarked,
             completed_projects.project_url,
-            completed_projects.grade
+            completed_projects.grade,
+            CASE 
+                WHEN completed_projects.idea_id IS NOT NULL AND completed_projects.user_id IS NOT NULL THEN TRUE
+                ELSE FALSE
+            END AS completed
         FROM user_idea_link
         LEFT JOIN ideas ON user_idea_link.idea_id = ideas.idea_id
         LEFT JOIN completed_projects ON user_idea_link.idea_id = completed_projects.idea_id AND user_idea_link.user_id = completed_projects.user_id
         WHERE user_idea_link.user_id = :user_id;
         """)
+    
+    '''
+            SELECT 
+            ideas.idea_id,
+            ideas.project_name,
+            ideas.description,
+            user_idea_link.selected,
+            user_idea_link.bookmarked,
+            completed_projects.project_url,
+            completed_projects.grade
+        FROM user_idea_link
+        LEFT JOIN ideas ON user_idea_link.idea_id = ideas.idea_id
+        LEFT JOIN completed_projects ON user_idea_link.idea_id = completed_projects.idea_id AND user_idea_link.user_id = completed_projects.user_id
+        WHERE user_idea_link.user_id = :user_id;
+'''
 
     result = db.session.execute(command, {"user_id": user_id})
     project_info_list = result.fetchall()
