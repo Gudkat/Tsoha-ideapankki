@@ -130,49 +130,6 @@ def select_idea(user_id, idea_id, selected=False, bookmarked=False):
     except Exception as e:
         print("Error:", e)
 
-
-# Probably not needed anymore
-def get_selected_ideas(user_id):
-    '''
-    Gets the ideas that the user has selected.
-
-    Parameters:
-        user_id (int): User ID of the individual.
-
-    Returns:
-        ideas (list): List of the ideas that the user has selected.
-    '''
-
-    command = text("""
-        SELECT idea_id, project_name, description FROM ideas
-        WHERE idea_id IN (SELECT idea_id FROM user_idea_link WHERE user_id=:user_id AND selected=:selected)
-        """)
-
-    result = db.session.execute(command, {"user_id": user_id, "selected": True})
-    ideas = result.fetchall()
-    return ideas
-
-# Probably not needed anymore
-def get_bookmarked_ideas(user_id):
-    '''
-    Gets the ideas that the user has bookmarked.
-
-    Parameters:
-        user_id (int): User ID of the individual.
-
-    Returns:
-        ideas (list): List of the ideas that the user has bookmarked.
-    '''
-
-    command = text("""
-        SELECT idea_id, project_name, description FROM ideas
-        WHERE idea_id IN (SELECT idea_id FROM user_idea_link WHERE user_id=:user_id AND bookmarked=:bookmarked)
-        """)
-
-    result = db.session.execute(command, {"user_id": user_id, "bookmarked": True})
-    ideas = result.fetchall()
-    return ideas
-
 def is_idea_completed(idea_id, user_id):
     '''
     Checks if the idea is marked completed for the current user.
@@ -255,21 +212,6 @@ def get_all_project_info(user_id):
         LEFT JOIN completed_projects ON user_idea_link.idea_id = completed_projects.idea_id AND user_idea_link.user_id = completed_projects.user_id
         WHERE user_idea_link.user_id = :user_id;
         """)
-    
-    '''
-            SELECT 
-            ideas.idea_id,
-            ideas.project_name,
-            ideas.description,
-            user_idea_link.selected,
-            user_idea_link.bookmarked,
-            completed_projects.project_url,
-            completed_projects.grade
-        FROM user_idea_link
-        LEFT JOIN ideas ON user_idea_link.idea_id = ideas.idea_id
-        LEFT JOIN completed_projects ON user_idea_link.idea_id = completed_projects.idea_id AND user_idea_link.user_id = completed_projects.user_id
-        WHERE user_idea_link.user_id = :user_id;
-'''
 
     result = db.session.execute(command, {"user_id": user_id})
     project_info_list = result.fetchall()
